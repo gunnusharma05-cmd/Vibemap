@@ -1,7 +1,5 @@
 const https = require('https');
 const http = require('http');
-
-// Sentiment lexicon - 80 high-impact emotion words
 const lex = new Map([
   ['amazing',3],['awesome',3],['brilliant',3],['excellent',3],['fantastic',3],['great',2],['good',2],['happy',2],['love',3],['wonderful',3],
   ['best',2],['perfect',2],['beautiful',2],['exciting',2],['incredible',3],['outstanding',3],['superb',3],['win',2],['success',2],['victory',2],
@@ -12,8 +10,6 @@ const lex = new Map([
   ['killed',-2],['dead',-2],['attack',-2],['war',-3],['threat',-2],['risk',-1],['danger',-2],['safe',1],['secure',1],['protect',1],
   ['breakthrough',3],['innovation',2],['revolutionary',3],['impressive',2],['stunning',3],['chaos',-2],['panic',-2],['fear',-2],['hope',2],['optimistic',2]
 ]);
-
-// 8 reliable RSS sources
 const src = [
   {n:'HackerNews',u:'https://hnrss.org/frontpage'},
   {n:'BBC Tech',u:'https://feeds.bbci.co.uk/news/technology/rss.xml'},
@@ -24,11 +20,7 @@ const src = [
   {n:'Slashdot',u:'https://rss.slashdot.org/Slashdot/slashdotMain'},
   {n:'Reddit Tech',u:'https://www.reddit.com/r/technology/.rss'}
 ];
-
-// ANSI colors
 const c = {r:'\x1b[91m',g:'\x1b[92m',b:'\x1b[94m',y:'\x1b[93m',w:'\x1b[97m',x:'\x1b[0m',B:'\x1b[1m'};
-
-// Fetch with timeout and redirect handling
 const fch = (url, tmo = 5000) => new Promise((res, rej) => {
   const lib = url.startsWith('https') ? https : http;
   const tmr = setTimeout(() => rej(new Error('timeout')), tmo);
@@ -43,8 +35,6 @@ const fch = (url, tmo = 5000) => new Promise((res, rej) => {
     rsp.on('end', () => { clearTimeout(tmr); res(dat); });
   }).on('error', (err) => { clearTimeout(tmr); rej(err); });
 });
-
-// Parse RSS titles
 const prs = (xml) => {
   const ttl = [];
   const rgx = /<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/gi;
@@ -55,8 +45,6 @@ const prs = (xml) => {
   }
   return ttl.slice(1);
 };
-
-// Sentiment score for single text
 const snt = (txt) => {
   const wds = txt.split(/\s+/);
   let scr = 0, cnt = 0;
@@ -66,15 +54,11 @@ const snt = (txt) => {
   }
   return cnt > 0 ? scr / cnt : 0;
 };
-
-// Analyze all headlines
 const anl = (hdl) => {
   let tot = 0;
   for (const h of hdl) tot += snt(h);
   return hdl.length > 0 ? tot / hdl.length : 0;
 };
-
-// Colorize sentiment bar
 const clr = (scr, int) => {
   const chr = int > 1.5 ? '█' : int > 0.8 ? '▓' : int > 0.4 ? '▒' : '░';
   if (scr > 0.3) return c.g + chr.repeat(5) + c.x;
@@ -82,8 +66,6 @@ const clr = (scr, int) => {
   if (Math.abs(scr) < 0.15) return c.b + chr.repeat(5) + c.x;
   return c.y + chr.repeat(5) + c.x;
 };
-
-// Visualize results
 const viz = (res, vol, cyc) => {
   process.stdout.write('\x1Bc');
   console.log(c.B + c.w + '╔════════════════════════════════════════════════════════╗');
@@ -108,12 +90,9 @@ const viz = (res, vol, cyc) => {
   console.log('\n' + c.B + `  Global Mood: ${ovr}${c.x} ${c.w}(${avg >= 0 ? '+' : ''}${avg.toFixed(3)})${c.x}\n`);
   console.log(c.w + '  Press Ctrl+C to exit' + c.x + '\n');
 };
-
-// Main scraping loop
 const run = async () => {
   const prv = new Map();
   let cyc = 0;
-  
   while (true) {
     cyc++;
     const prm = src.map(async (s) => {
@@ -129,22 +108,17 @@ const run = async () => {
         return {nam: s.n, sco: 0, cnt: 0, int: 0};
       }
     });
-    
     const res = await Promise.all(prm);
     const vld = res.filter(r => r.cnt > 0);
-    
     if (vld.length > 0) {
       const vol = vld.reduce((a, i) => a + i.int, 0) / vld.length;
       viz(vld, vol, cyc);
     } else {
       console.log(c.r + '\n⚠️  All sources failed. Retrying...\n' + c.x);
     }
-    
     await new Promise(r => setTimeout(r, 3000));
   }
 };
-
-// Startup
 console.log(c.B + c.g + '\n🚀 VibeMap Initializing...' + c.x);
 console.log(c.w + '   Connecting to 8 emotion streams...\n' + c.x);
 setTimeout(() => run(), 1500);
