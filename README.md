@@ -156,7 +156,6 @@ lex = {
 
 
 
-## 🏆 Why This Wins
 
 ### **Judges' Scoring Criteria - Our Strengths**
 
