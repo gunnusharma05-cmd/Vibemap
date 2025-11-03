@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeMap Architecture</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #16213e;
+            border: 3px solid #0f4c75;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            max-width: 1200px;
+        }
+        h1 {
+            color: #3edbf0;
+            text-align: center;
+            font-size: 32px;
+            margin: 0 0 40px 0;
+            text-shadow: 0 0 10px rgba(62, 219, 240, 0.5);
+        }
+        .pipeline {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .stage {
+            background: #1a1a2e;
+            border: 2px solid #3edbf0;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .stage:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(62, 219, 240, 0.3);
+        }
+        .stage-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .stage-number {
+            background: #0f4c75;
+            color: #3edbf0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .stage-title {
+            color: #3edbf0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .stage-function {
+            color: #4ecca3;
+            font-size: 18px;
+            margin-left: auto;
+        }
+        .stage-desc {
+            color: #bbe1fa;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-left: 55px;
+        }
+        .stage-details {
+            color: #7fb3d5;
+            font-size: 12px;
+            margin-left: 55px;
+            margin-top: 8px;
+        }
+        .arrow {
+            text-align: center;
+            color: #3edbf0;
+            font-size: 30px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(5px); }
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .metric {
+            background: #1a1a2e;
+            border: 2px solid #4ecca3;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .metric-value {
+            color: #4ecca3;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            color: #bbe1fa;
+            font-size: 14px;
+        }
+        .loop-indicator {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff6b6b;
+            font-size: 60px;
+            animation: rotate 3s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 VIBEMAP ARCHITECTURE</h1>
+        
+        <div class="pipeline">
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">1</div>
+                    <div class="stage-title">CONCURRENT FETCH</div>
+                    <div class="stage-function">fch()</div>
+                </div>
+                <div class="stage-desc">
+                    Parallel HTTP requests to 8 RSS sources using Promise.all()<br>
+                    5-second timeout with automatic redirect handling
+                </div>
+                <div class="stage-details">
+                    📡 Sources: HackerNews, BBC Tech, TechCrunch, TheVerge, ArsTech, Wired, Slashdot, Reddit<br>
+                    ⚡ Complexity: O(1) per source | 🔄 Auto-retry on failure
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">2</div>
+                    <div class="stage-title">REGEX PARSING</div>
+                    <div class="stage-function">prs()</div>
+                </div>
+                <div class="stage-desc">
+                    Extract titles from XML using lightweight regex patterns<br>
+                    No DOM parser overhead - pure string matching
+                </div>
+                <div class="stage-details">
+                    🎯 Pattern: &lt;title&gt;(?:&lt;!\[CDATA\[)?(.*?)(?:\]\]&gt;)?&lt;/title&gt;<br>
+                    ⚡ Complexity: O(n) where n = XML length | 📊 Extracts ~25 headlines per source
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">3</div>
+                    <div class="stage-title">SENTIMENT ANALYSIS</div>
+                    <div class="stage-function">snt()</div>
+                </div>
+                <div class="stage-desc">
+                    Score each headline using 80-word emotion lexicon<br>
+                    Map-based O(1) lookup for maximum performance
+                </div>
+                <div class="stage-details">
+                    📚 Lexicon: 80 high-impact emotion words (-3 to +3 scale)<br>
+                    ⚡ Complexity: O(m) where m = words | 💡 Score = Σ(word_scores) / word_count
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="stage">
+                <div class="stage-header">
+                    <div class="stage-number">4</div>
+                    <div class="stage-title">AGGREGATION</div>
+                    <div class="stage-function">anl()</div>
+                </div>
+                <div class="stage-desc">
+                    Calculate average sentiment across all headlines per source<br>
+                    Track velocity by comparing with previous cycle
+                </div>
+                <div class="stage-details">
+                    📈 Metrics: Average score, volatility (Δ between cycles)<br>
+                    ⚡ Complexity: O(k) where k = headlines | 🔥 High volatility = breaking news
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+
+            <div class="stage" style="position: relative;">
+                <div class="stage-header">
+                    <div class="stage-number">5</div>
+                    <div class="stage-title">VISUALIZATION</div>
+                    <div class="stage-function">viz()</div>
+                </div>
+                <div class="stage-desc">
+                    Render color-coded terminal dashboard with ANSI escape codes<br>
+                    Unicode block characters for visual sentiment bars
+                </div>
+                <div class="stage-details">
+                    🎨 Colors: 🟢 Green (positive) | 🔴 Red (negative) | 🔵 Blue (neutral) | 🟡 Yellow (mixed)<br>
+                    ⚡ Complexity: O(sources) | 🖥️ Updates every 3 seconds
+                </div>
+                <div class="loop-indicator">↻</div>
+            </div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value">&lt;2s</div>
+                <div class="metric-label">Full Pipeline Latency</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">148</div>
+                <div class="metric-label">Lines of Code</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">0</div>
+                <div class="metric-label">External Dependencies</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

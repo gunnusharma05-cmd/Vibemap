@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeMap Terminal Output</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #0a0a0a;
+            font-family: 'Courier New', 'Consolas', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .terminal {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            width: 900px;
+            color: #f0f0f0;
+            position: relative;
+        }
+        .terminal::before {
+            content: '● ● ●';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            color: #666;
+            font-size: 12px;
+            letter-spacing: 5px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+        .title-box {
+            border: 2px solid #4a9eff;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .title-box-line {
+            color: #4a9eff;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .status-item {
+            color: #aaa;
+        }
+        .status-calm {
+            color: #4ecca3;
+        }
+        .source-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .source-row:hover {
+            background: rgba(74, 158, 255, 0.1);
+            padding-left: 10px;
+        }
+        .emoji {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        .source-name {
+            font-weight: bold;
+            width: 140px;
+            color: #f0f0f0;
+        }
+        .bar {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .bar-positive {
+            color: #4ecca3;
+        }
+        .bar-negative {
+            color: #ff6b6b;
+        }
+        .bar-neutral {
+            color: #4a9eff;
+        }
+        .arrow {
+            margin: 0 8px;
+            font-weight: bold;
+        }
+        .arrow-up {
+            color: #4ecca3;
+        }
+        .arrow-down {
+            color: #ff6b6b;
+        }
+        .arrow-neutral {
+            color: #4a9eff;
+        }
+        .score {
+            width: 80px;
+            color: #f0f0f0;
+        }
+        .count {
+            color: #888;
+            font-size: 13px;
+        }
+        .footer {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #333;
+        }
+        .global-mood {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .mood-positive {
+            color: #4ecca3;
+        }
+        .exit-text {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="header">
+            <div class="title-box">
+                <div class="title-box-line">╔════════════════════════════════════════════════════════╗</div>
+                <div class="title-box-line">║       🌐 VIBEMAP - EMOTIONAL INTERNET RADAR        ║</div>
+                <div class="title-box-line">╚════════════════════════════════════════════════════════╝</div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <span class="status-item">⏰ 18:44:09</span>
+            <span class="status-item">📊 <span class="status-calm">✓ CALM</span> (0.38)</span>
+            <span class="status-item">🔄 Cycle #42</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">😊</span>
+            <span class="source-name">HackerNews</span>
+            <span class="bar bar-positive">▓▓▓▓▓</span>
+            <span class="arrow arrow-up">↑</span>
+            <span class="score"> 0.58</span>
+            <span class="count">(24)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">😐</span>
+            <span class="source-name">BBC Tech</span>
+            <span class="bar bar-neutral">░░░░░</span>
+            <span class="arrow arrow-neutral">→</span>
+            <span class="score">-0.07</span>
+            <span class="count">(29)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">😊</span>
+            <span class="source-name">TechCrunch</span>
+            <span class="bar bar-positive">▒▒▒▒▒</span>
+            <span class="arrow arrow-up">↑</span>
+            <span class="score"> 0.42</span>
+            <span class="count">(26)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">🙂</span>
+            <span class="source-name">TheVerge</span>
+            <span class="bar bar-positive">░░░░░</span>
+            <span class="arrow arrow-up">↑</span>
+            <span class="score"> 0.28</span>
+            <span class="count">(22)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">😐</span>
+            <span class="source-name">ArsTech</span>
+            <span class="bar bar-neutral">░░░░░</span>
+            <span class="arrow arrow-neutral">→</span>
+            <span class="score"> 0.10</span>
+            <span class="count">(21)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">😊</span>
+            <span class="source-name">Wired</span>
+            <span class="bar bar-positive">███████</span>
+            <span class="arrow arrow-up">↑</span>
+            <span class="score"> 0.76</span>
+            <span class="count">(29)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">😐</span>
+            <span class="source-name">Slashdot</span>
+            <span class="bar bar-neutral">░░░░░</span>
+            <span class="arrow arrow-neutral">→</span>
+            <span class="score">-0.12</span>
+            <span class="count">(17)</span>
+        </div>
+
+        <div class="source-row">
+            <span class="emoji">🙂</span>
+            <span class="source-name">Reddit Tech</span>
+            <span class="bar bar-positive">░░░░░</span>
+            <span class="arrow arrow-neutral">→</span>
+            <span class="score"> 0.16</span>
+            <span class="count">(25)</span>
+        </div>
+
+        <div class="footer">
+            <div class="global-mood">
+                Global Mood: <span class="mood-positive">🌟 POSITIVE</span> (+0.264)
+            </div>
+            <div class="exit-text">Press Ctrl+C to exit</div>
+        </div>
+    </div>
+</body>
+</html>
